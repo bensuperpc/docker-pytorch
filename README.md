@@ -1,2 +1,2 @@
 # docker-pytorch
-pytorch in docker
+pytorch in docker with openCV, numpy ect...
