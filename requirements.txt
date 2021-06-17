@@ -1,0 +1,11 @@
+opencv-contrib-python
+pandas
+numpy
+Pillow
+matplotlib
+graphviz
+pydot
+scikit-learn
+scipy
+pytest
+hypothesis

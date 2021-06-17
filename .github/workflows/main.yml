@@ -1,0 +1,43 @@
+name: docker-torch
+
+on:
+  push:
+    branches:
+    - 'main'
+    - 'master'
+    - 'dev'
+    paths-ignore:
+    - 'README.md'
+    - '.github/workflows/dockerhub-description.yml'
+  pull_request:
+    branches:
+    - '*'
+  schedule:
+  - cron:  "0 22 */7 * *"
+  workflow_dispatch:
+
+jobs:
+  image:
+    name: docker-torch
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        version: [latest, 1.9.0-cuda10.2-cudnn7-runtime, 1.9.0-cuda11.1-cudnn8-runtime, 1.8.1-cuda10.2-cudnn7-runtime,
+          1.8.1-cuda11.1-cudnn8-runtime, 1.7.1-cuda11.0-cudnn8-runtime]
+    steps:
+      - name: "📥 Checkout Code"
+        uses: actions/checkout@v2.3.4
+        with:
+          submodules: 'recursive'
+          fetch-depth: 0
+      - name: "🛠️ Build"
+        run: make ${{ matrix.version }}
+      - name: "📤 Upload to hub.docker.com"
+        if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' }}
+        run: |
+            docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASS }} || echo hub.docker.com: login faild
+            make push
+      - name: "🧹 Clean"
+        run: make clean
