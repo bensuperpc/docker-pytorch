@@ -28,7 +28,7 @@ jobs:
           1.8.1-cuda11.1-cudnn8-runtime, 1.7.1-cuda11.0-cudnn8-runtime]
     steps:
       - name: "📥 Checkout Code"
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v3.0.1
         with:
           submodules: 'recursive'
           fetch-depth: 0
